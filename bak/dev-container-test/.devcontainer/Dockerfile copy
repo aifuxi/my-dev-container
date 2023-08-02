@@ -1,0 +1,32 @@
+FROM centos:centos7
+
+# TODO：配置镜像源：阿里云、中科大、清华
+
+ENV LANG C.UTF-8
+
+WORKDIR /root/aifuxi
+
+ENV SHELL /bin/bash
+
+# TODO：安装nvm，配置淘宝node镜像
+
+# ENV PNPM_HOME /root/.local/share/pnpm \
+#     && PATH $PNPM_HOME:$PATH
+# RUN npm config set registry=https://registry.npmmirror.com \ 
+#     && npm i -g pnpm \ 
+#     && pnpm setup \ 
+#     && pnpm config set store-dir $PNPM_HOME 
+
+RUN if command -v yum &> /dev/null; then \
+    yum update && yum install -y git zsh vim; \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; \
+    # sh -c 'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting'; \
+    # sh -c 'git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions'; \
+    # echo 'export ZSH=$HOME/.oh-my-zsh' >> /root/.zshrc; \
+    # echo 'ZSH_THEME="robbyrussell"' >> /root/.zshrc; \
+    # echo 'plugins=(git zsh-syntax-highlighting zsh-autosuggestions)' >> /root/.zshrc; \
+    # echo 'source $ZSH/oh-my-zsh.sh' >> /root/.zshrc; \
+    else \
+    echo "yum command does not exist."; \
+    fi
+ENV SHELL /bin/zsh

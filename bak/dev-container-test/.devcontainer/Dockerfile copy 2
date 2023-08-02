@@ -1,0 +1,30 @@
+FROM centos:centos7
+
+# ENV LANG C.UTF-8
+
+# localedef -c -f UTF-8 -i zh_CN zh_CN.UFT-8
+# [root@1a4b5b17ff84 aifuxi]# locale -a | grep CN
+# zh_CN.uft8
+# [root@1a4b5b17ff84 aifuxi]# LANG="zh_CN.UTF-8"
+
+WORKDIR /root/aifuxi
+
+ENV SHELL /bin/bash
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo \
+    && sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo \
+    && yum clean all \
+    && yum makecache \
+    && yum -y install epel-release \
+    && curl -o /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-7.repo \
+    && yum clean all \
+    && yum makecache \
+    && yum -y install vim wget git kde-l10n-Chinese \
+    && yum -y reinstall glibc-common \
+	&& localedef -c -f UTF-8 -i zh_CN zh_CN.UTF-8 \
+    && yum -y upgrade
+
+ENV LANG=zh_CN.UTF-8
+
+# yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm
